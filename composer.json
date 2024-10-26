@@ -1,23 +1,24 @@
 {
   "name": "php-smpp/php-smpp",
-  "description": "PHP-based SMPP client lib",
+  "description": "PHP-based SMPP client library",
   "keywords": ["smpp", "sms", "texting", "gsm"],
-  "homepage": "http://github.com/onlinecity/php-smpp",
+  "homepage": "https://github.com/melroselabs/php-smpp",
   "type": "library",
-  "license": "LGPL",
+  "license": ["MIT", "LGPL-2.1-only"],
   "authors": [
     {
+      "name": "Mark Hay",
+      "email": "mark.hay@melroselabs.com"
+    },
+    {
       "name": "Hans Duedal",
-      "email": "hd@oc.dk",
-      "homepage": "http://oc.dk"
+      "email": "hd@oc.dk"
     }
   ],
   "require": {
-    "php": ">=5.3.3",
+    "php": ">=7.0.0",
     "ext-sockets": "*",
     "ext-mbstring": "*"
-  },
-  "require-dev": {
   },
   "autoload": {
     "files": [
