@@ -1,17 +1,11 @@
-THIS REPO IS NO LONGER MAINTAINED!
-
-Look at https://github.com/alexandr-mironov/php-smpp for an updated version.
-
 PHP-based SMPP client lib
 =============
 
-This is a simplified SMPP client lib for sending or receiving smses through [SMPP v3.4](http://www.smsforum.net/SMPP_v3_4_Issue1_2.zip).
+This is a simplified SMPP client lib for sending or receiving SMS through [SMPP v3.4](https://smpp.org/SMPP_v3_4_Issue1_2.pdf).
 
-In addition to the client, this lib also contains an encoder for converting UTF-8 text to the GSM 03.38 encoding, and a socket wrapper. The socket wrapper provides connection pool, IPv6 and timeout monitoring features on top of PHP's socket extension.
+In addition to the client, this lib also contains an encoder for converting UTF-8 text to the GSM 03.38 encoding, and a socket wrapper. The socket wrapper has been updated for PHP 8 and provides connection pool, IPv6 and timeout monitoring features on top of PHP's socket extension.
 
-This lib has changed significantly from it's first release, which required namespaces and included some worker components. You'll find that release at [1.0.1-namespaced](https://github.com/onlinecity/php-smpp/tree/1.0.1-namespaced)
-
-This lib requires the [sockets](http://www.php.net/manual/en/book.sockets.php) PHP-extension, and is not supported on Windows. A [windows-compatible](https://github.com/onlinecity/php-smpp/tree/windows-compatible) version is also available.
+This library has been forked from https://github.com/onlinecity/php-smpp.
 
 
 Basic usage example
@@ -26,7 +20,7 @@ require_once 'gsmencoder.class.php';
 require_once 'sockettransport.class.php';
 
 // Construct transport and client
-$transport = new SocketTransport(array('smpp.provider.com'),2775);
+$transport = new SocketTransport(array('smscsim.smpp.org'),2775);
 $transport->setRecvTimeout(10000);
 $smpp = new SmppClient($transport);
 
@@ -116,16 +110,13 @@ F.A.Q.
 **Can I use this to send messages from my website?**
 Not on it's own, no. After PHP processes the request on a website, it closes all connections. Most SMPP providers do not want you to open and close connections, you should keep them alive and send enquire_link commands periodically. Which means you probably need to get some kind of long running process, ie. using the [process control functions](http://www.php.net/manual/en/book.pcntl.php), and implement a form of queue system which you can push to from the website. This requires shell level access to the server, and knowledge of unix processes.
 
-**How do I receive delivery receipts or SMS'es?**
+**How do I receive delivery receipts or SMS from mobiles?**
 To receive a delivery receipt or a SMS you must connect a receiver in addition to the transmitter. This receiver must wait for a delivery receipt to arrive, which means you probably need to use the [process control functions](http://www.php.net/manual/en/book.pcntl.php).
 
 We do have an open source implementation at [php-smpp-worker](https://github.com/onlinecity/php-smpp-worker) you can look at for inspiration, but we cannot help you with making your own. Perhaps you should look into if your SMSC provider can give you a HTTP based API or using turnkey software such as [kannel](http://www.kannel.org/), this project provides the protocol implementation only and a basic socket wrapper.
 
 **I can't send more than 160 chars**
 There are three built-in methods to send Concatenated SMS (csms); CSMS_16BIT_TAGS, CSMS_PAYLOAD, CSMS_8BIT_UDH. CSMS_16BIT_TAGS is the default, if it don't work try another.
-
-**Is this lib compatible with PHP 5.2.x ?**
-It's tested on PHP 5.3, but is known to work with 5.2 as well.
 
 **Can it run on windows?**
 It requires the sockets extension, which is available on windows, but is incomplete. Use the [windows-compatible](https://github.com/onlinecity/php-smpp/tree/windows-compatible) version instead, which uses fsockopen and stream functions.
@@ -146,7 +137,7 @@ Most likely your SMPP provider doesn't support NULL-terminating the message fiel
 It typically means your SMPP provider rejected your login credentials, ie. your username or password.
 
 **Can I test the client library without a SMPP server?**
-Many service providers can give you a demo account, but you can also use the [logica opensmpp simulator](http://opensmpp.logica.com/CommonPart/Introduction/Introduction.htm#simulator) (java) or [smsforum client test tool](http://www.smsforum.net/sctt_v1.0.Linux.tar.gz) (linux binary). In addition to a number of real-life SMPP servers this library is tested against these simulators.
+Many service providers can give you a demo account, but you can also use SMSC simulators from https://smpp.org and https://melroselabs.com/smscsim.
 
 **I have an issue that not mentioned here, what do I do?**
 Please obtain full debug information, and open an issue here on github. Make sure not to include the Send PDU hex-codes of the BindTransmitter call, since it will contain your username and password. Other hex-output is fine, and greatly appeciated. Any PHP Warnings or Notices could also be important. Please include information about what SMPP server you are connecting to, and any specifics.
